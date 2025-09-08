@@ -15,4 +15,4 @@ def show_static(request, name: str):
     whitelist = r'^[\w\-]+\.[\w\-]+$'
     if not re.match(whitelist, name):
         return HttpResponseForbidden(f'Static file name must match {whitelist}')
-    return FileResponse(open(f'static/{name}', 'rb'))
+    return FileResponse(open(f'main/static/{name}', 'rb'))
