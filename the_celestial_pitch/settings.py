@@ -28,8 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-re#z-vvfyf(ke@)8lx7&$l7b8vk(z7xs1x2wmyvne&u)rl@bq-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "True"
-DEBUG = not PRODUCTION
+PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
+DEBUG = os.getenv("DEBUG", str(not PRODUCTION)).lower() == "true"
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id"]
 

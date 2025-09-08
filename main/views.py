@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import render
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, FileResponse
 
 def show_index(request):
     context = {
@@ -11,9 +11,8 @@ def show_index(request):
 
     return render(request, 'index.html', context)
 
-def show_static(request, path: str):
+def show_static(request, name: str):
     whitelist = r'^[\w\-]+\.[\w\-]+$'
-    if not re.match(whitelist, path):
-        return HttpResponseForbidden(f'Static path must match {whitelist}')
-
-    return render(request, f'static/{path}')
+    if not re.match(whitelist, name):
+        return HttpResponseForbidden(f'Static file name must match {whitelist}')
+    return FileResponse(open(f'static/{name}', 'rb'))

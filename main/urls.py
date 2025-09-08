@@ -5,5 +5,5 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.show_index, name='index'),
-    path('static/<str:path>', views.show_static, name='static'),
+    path('static/<str:name>', views.show_static, name='static'),
 ]
