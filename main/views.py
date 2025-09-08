@@ -1,5 +1,19 @@
-from django.shortcuts import render, HttpResponse
+import re
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
 
-# Create your views here.
 def show_index(request):
-    return HttpResponse("Not implemented")
+    context = {
+        'npm': '2406404705',
+        'name': 'Muhammad Fahri Muharram',
+        'class': 'PBP E',
+    }
+
+    return render(request, 'index.html', context)
+
+def show_static(request, path: str):
+    whitelist = r'^[\w\-]+\.[\w\-]+$'
+    if not re.match(whitelist, path):
+        return HttpResponseForbidden(f'Static path must match {whitelist}')
+
+    return render(request, f'static/{path}', context)

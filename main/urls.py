@@ -5,4 +5,5 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.show_index, name='index'),
+    path('static/<str:path>', views.show_static, name='static'),
 ]
