@@ -16,4 +16,4 @@ def show_static(request, path: str):
     if not re.match(whitelist, path):
         return HttpResponseForbidden(f'Static path must match {whitelist}')
 
-    return render(request, f'static/{path}', context)
+    return render(request, f'static/{path}')
