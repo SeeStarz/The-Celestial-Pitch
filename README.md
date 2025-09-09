@@ -1,6 +1,11 @@
 # The Celestial Pitch
 Basically I was tasked to make Football Shop related website so might as well make it about game powerups and parkour techs.
 
+## Note About Branches
+I only realized I could do this after finishing the second assignment lol.
+- main: Where development happens, maybe I will use dev or something later but idk maybe not.
+- master: A dummy branch for merging whenever I want to deploy.
+
 ## Quick Links
 - [Tugas Individu 2](#tugas-individu-2)
 - [PWS Deployment](http://muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id)
