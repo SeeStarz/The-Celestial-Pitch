@@ -47,6 +47,9 @@ Basically I was tasked to make Football Shop related website so might as well ma
 - Push branch master pada PWS
 - Pray
 
+### Bagan Request Client
+![Bagan](https://i.imgur.com/HGT0xXh.png)
+
 ### Peran settings.py Pada Django
 Peran `settings.py` pada umumnya untuk mensetting variabel-variabel global yang digunakan oleh engine Django secara keseluruhan.
 Hal-hal seperti debug mode, database url, url-url template dan static, allowed hosts, dan berbagai macam miscellaneous lainnya.
@@ -66,3 +69,4 @@ Tidak perlu menggunakan SQL query secara manual karena terdapat Django models.
 Tidak perlu menambahkan logika parsing dan response HTTP rumit karena kebanyakan sudah di handle oleh Django.
 Tidak perlu menambahkan logika templating sendiri karena templating engine sudah disertakan oleh Django.
 Ditulis menggunakan bahasa python yang sangat mudah dibaca.
+
