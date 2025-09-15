@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 
 # Create your models here.
-class Item(models.Model):
+class Product(models.Model):
     CATEGORY_CHOICES = [
         ('gear', 'Gear'),
         ('relic', 'Relic'),
