@@ -140,7 +140,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_URL = 'static/'
-STATIC_ROOT = os.getenv('STATIC_ROOT', 'static_root')
+STATIC_ROOT = os.getenv('STATIC_ROOT')
+if STATIC_ROOT is None:
+    raise RuntimeError('STATIC_ROOT environment missing')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
