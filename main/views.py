@@ -13,9 +13,11 @@ def show_index(request):
     return render(request, 'index.html', context)
 
 def show_static(request, name: str):
+    print(f'Trying to process {name}')
     # Matches /some-path/that-could/be-long/must-include/some-extension.txt-custom
     whitelist = r'^(?:[\w\-]+/)*[\w\-]+\.[\w\-]+$'
     if not re.match(whitelist, name):
         return HttpResponseForbidden(f'Static file name must match {whitelist}')
     path = f'{os.getenv("STATIC_ROOT", "/static_root")}/{name}'
+    print(f'Trying to serve {path}')
     return FileResponse(open(path, 'rb'))
