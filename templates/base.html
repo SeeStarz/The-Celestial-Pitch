@@ -1,0 +1,43 @@
+{% load static %}
+<!-- https://github.com/h5bp/html5-boilerplate-template/blob/main/index.html -->
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- Keep phones from being stupid -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Page icon -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" sizes="any">
+    <link rel="icon" href="{% static 'icon.svg' %}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{% static 'icon.png' %}">
+
+    {% block fonts %}
+    <!-- Celeste font -->
+    <link href="https://fonts.cdnfonts.com/css/renogare" rel="stylesheet">
+    {% endblock fonts %}
+
+    <!-- PWA -->
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+
+    <!-- App bar color -->
+    <meta name="theme-color" content="#fafafa">
+
+    <!-- Page specific stuffs -->
+    <title>{% block title %}The Celestial Pitch{% endblock title %}</title>
+    <meta name="description" content="{% block description %}{% endblock description %}">
+    {% block styles %}{% endblock styles %}
+    {% block scripts %}{% endblock scripts %}
+    {% block open_graph %}
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:alt" content="">
+    {% endblock open_graph %}
+  </head>
+
+  <body>
+    {% block content %}<p>It's empty :D</p>{% endblock content %}
+  </body>
+</html>
