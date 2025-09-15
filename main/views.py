@@ -1,4 +1,5 @@
 import re
+import os
 from django.shortcuts import render
 from django.http import HttpResponseForbidden, FileResponse
 
@@ -12,7 +13,9 @@ def show_index(request):
     return render(request, 'index.html', context)
 
 def show_static(request, name: str):
-    whitelist = r'^[\w\-]+\.[\w\-]+$'
+    # Matches /some-path/that-could/be-long/must-include/some-extension.txt-custom
+    whitelist = r'^(?:[\w\-]+/)*[\w\-]+\.[\w\-]+$'
     if not re.match(whitelist, name):
         return HttpResponseForbidden(f'Static file name must match {whitelist}')
-    return FileResponse(open(f'main/static/{name}', 'rb'))
+    path = f'{os.getenv("STATIC_ROOT", "/static_root")}/{name}'
+    return FileResponse(open(path, 'rb'))
