@@ -1,6 +1,7 @@
 import re
+import uuid
 from django.shortcuts import render
-from django.http import HttpResponseForbidden, FileResponse
+from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError
 from django.conf import settings
 
 def show_index(request):
@@ -19,3 +20,21 @@ def show_static(request, name: str):
         return HttpResponseForbidden(f'Static file name must match {whitelist}')
     path = f'{settings.STATIC_ROOT}/{name}'
     return FileResponse(open(path, 'rb'))
+
+def show_product_list(request):
+    return HttpResponseServerError()
+
+def show_product_by_id(request, id: uuid.uuid4):
+    return HttpResponseServerError()
+
+def xml_product_list(request):
+    return HttpResponseServerError()
+
+def xml_product_by_id(request, id: uuid.uuid4):
+    return HttpResponseServerError()
+
+def json_product_list(request):
+    return HttpResponseServerError()
+
+def json_product_by_id(request, id: uuid.uuid4):
+    return HttpResponseServerError()
