@@ -19,5 +19,12 @@
 <div class="entry">
   <h3>Class:</h3><p>{{ class }}</p>
 </div>
+
+<a href="{% url 'main:show_product_list' %}">
+  <button>
+    Start shopping
+  </button>
+</a>
+
 <img src="{% static 'main/wavegoal.png' %}">
 {% endblock content %}
