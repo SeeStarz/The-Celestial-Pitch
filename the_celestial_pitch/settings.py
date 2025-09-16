@@ -28,10 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-re#z-vvfyf(ke@)8lx7&$l7b8vk(z7xs1x2wmyvne&u)rl@bq-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
-DEBUG = os.getenv("DEBUG", str(not PRODUCTION)).lower() == "true"
+PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
+DEBUG = os.getenv('DEBUG', str(not PRODUCTION)).lower() == 'true'
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id']
+CSRF_TRUSTED_ORIGINS = ['https://muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id']
 
 
 # Application definition
@@ -136,11 +137,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-STATIC_URL = 'static/'
-STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR / 'static_root')
+STATIC_URL = '/static/'
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+    ]
+else:
+    STATIC_ROOT = BASE_DIR / 'static_root'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
