@@ -1,8 +1,10 @@
 import re
 import uuid
 from django.shortcuts import render
-from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError
+from django.core import serializers
+from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError, HttpResponse, Http404
 from django.conf import settings
+from main.models import Product
 
 def show_index(request):
     context = {
@@ -28,13 +30,27 @@ def show_product_by_id(request, id: uuid.uuid4):
     return HttpResponseServerError()
 
 def xml_product_list(request):
-    return HttpResponseServerError()
+    product_list = Product.objects.all()
+    xml_data = serializers.serialize('xml', product_list)
+    return HttpResponse(xml_data, content_type='application/xml')
 
 def xml_product_by_id(request, id: uuid.uuid4):
-    return HttpResponseServerError()
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Http404()
+    xml_data = serializers.serialize('xml', product)
+    return HttpResponse(xml_data, content_type='application/xml')
 
 def json_product_list(request):
-    return HttpResponseServerError()
+    product_list = Product.objects.all()
+    json_data = serializers.serialize('json', product_list)
+    return HttpResponse(json_data, content_type='application/json')
 
 def json_product_by_id(request, id: uuid.uuid4):
-    return HttpResponseServerError()
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Http404()
+    json_data = serializers.serialize('json', product)
+    return HttpResponse(json_data, content_type='application/json')
