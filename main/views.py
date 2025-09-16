@@ -35,10 +35,25 @@ def create_product(request):
     return render(request, 'create_product.html', context)
 
 def show_product_list(request):
-    return HttpResponseServerError()
+    product_list = Product.objects.all()
+
+    context = {
+        'product_list': product_list,
+    }
+
+    return render(request, 'product_list.html', context)
 
 def show_product_by_id(request, id: uuid.uuid4):
-    return HttpResponseServerError()
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Http404()
+
+    context = {
+        'product': product
+    }
+
+    return render(request, 'product_detail.html', context)
 
 def xml_product_list(request):
     product_list = Product.objects.all()
