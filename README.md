@@ -7,8 +7,80 @@ I only realized I could do this after finishing the second assignment lol.
 - master: A dummy branch for merging whenever I want to deploy.
 
 ## Quick Links
+- [Tugas Individu 3](#tugas-individu-3)
 - [Tugas Individu 2](#tugas-individu-2)
 - [PWS Deployment](http://muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id)
+
+## Tugas Individu 3
+### Step by Step Implementation Checklist
+#### 1. Menambahkan Fungsi views Baru untuk Melihat Semua Object dan Object by ID Dalam Bentuk XML dan JSON
+- Import `Product` dari `main.models` serta method-method lain yang digunakan
+- Ambil keseluruhan product dengan `Product.objects.all()`, di sini `Product.objects` mengimplementasikan `QuerySet` dan `.all()` mengembalikan semua objek
+- Jika diminta id tertentu, dapat menggunakan `get_object_or_404(Product, pk=id)`, tetapi di sini saya gunakan `Product.objects.get(pk=id)` untuk mengembalikan satu elemen yang cocok
+- Gunakan `serializers.serialize('xml', product_list)` untuk mengubah data menjadi string xml, ubah menjadi json jika diminta dalam bentuk json, dan wrap dalam list jika hanya satu object
+- Return `HttpResponse` dengan `content_type='application/xml'` untuk xml dan `content_type='application/json'` untuk json
+
+#### 2. Menambahkan Routing URL untuk Masing-Masing views
+- Tambahkan URL baru untuk setiap views seperti URL routing yang lain
+- Untuk query yang menggunakan id, dapat menggunakan `<uuid:id>` dalam URL path
+- id merujuk pada nama parameter pada fungsi views
+
+#### 3. Membuat Halaman Data Objek Model
+- Adaptasi dari tutorial 2
+- Ubah `news_list` menjadi `product_list`, 'news' menjadi 'product', `News` menjadi `Product`, hilangkan `is_news_hot`, serta rename beberapa field seperti `title` menjadi `name`
+- Template di sini menggunakan tag `if`, `else`, `for` untuk mengintegrasikan dengan data dari django
+- Tombol `add` dan `detail` menggunakan tag `url` dan diisi reverse url dengan `app_name=<app>` serta `path(url, name=<func_name>)` dinyatakan sebagai `<app>:<func_name>`
+
+#### 4. Membuat Halaman Form untuk Menambahkan Objek
+- Adaptasi dari tutorial 2
+- Hampir persis sama kecuali dua nama display
+
+#### 5. Membuat Halaman yang Menampilkan Detail dari Objek
+- Adaptasi dari tutorial 2
+- Ubah 'news' menjadi 'product'
+- Hilangkan field yang tidak ada (is_news_hot)
+- Rename field yang direpresentasikan dengan nama berbeda (title menjadi nama, thumbnail menjadi icon, content menjadi description)
+- Tambahkan field yang belum ada (base_price)
+- Tombol "Back to Product List" menggunakan tag `url` yang juga menggunakan reverse url django]
+
+### Mengapa Diperlukan Data Delivery dalam Implementasi Platform
+Data delivery artinya transfer data antara satu tempat ke tempat yang lain, umumnya dengan platform/framework yang berbeda.
+Contohnya adalah django dengan javascript, atau django dengan external tools.
+Tanpa data delivery, platform/framework yang berbeda tidak dapat berkomunikasi satu sama lain.
+Tentu saja tanpa data yang lengkap, komputasi tidak dapat dilakukan, sehingga data delivery (misal json data melalui HTTP) diperlukan.
+
+### Perbandingan XML dan JSON
+Menurut saya XML dan JSON memiliki kegunaannya sendiri tergantung konteks.
+Untuk game modding atau konfigurasi ekstensif XML umumnya lebih ekspresif.
+Di sisi lain JSON lebih mudah dicerna, serta terintegrasi dengan javascript.
+Integrasi langsung dengan javascript adalah alasan utama JSON lebih umum ditemukan dalam ekosistem web.
+Untuk ekosistem selain web, kepopuleran JSON dikarenakan umumnya dan sederhananya JSON.
+Meskipun begitu terdapat juga menggunakan XML, TOML, atau bahkan penyimpanan custom seperti line by line atau key-value pair.
+
+### Fungsi dari Method is\_valid()
+Fungsi ini mengecek form yang diisi sudah sesuai dengan ketentuan.
+Pertama dicek apakah data dapat diubah menjadi python type (karena jika menggunakan external tools, misal `curl`, dapat saja data tidak valid).
+Lalu data dicek terhadap aturan untuk field tersebut, mungkin terhadap kategori, terhadap `uuid`, atau cek custom.
+Setelahnya, jika ada, semua field akan digabungkan dan dicek validitasnya sebagai suatu entitas utuh.
+Jika ada data yang tidak seharusnya, maka fungsi ini akan bernilai `False` dan error akan disimpan pada `form.errors`.
+Tanpa validasi sebelum `.save`, maka data akan langsung disimpan di database.
+Hal ini berbahaya karena database bisa saja tidak menerapkan constraint dengan benar atau terdapat constraint tambahan pada form yang melewati cek yang seharusnya.
+
+### Mengapa CSRF Token Dibutuhkan
+`csrf_token` digunakan untuk mencegah CSRF (Cross-Site Request Forgery) di mana website malicious menggunakan cookies dari user untuk mencoba melakukan request yang tidak seharusnya.
+Misalnya saja dapat membuat user yang sedang logged in memesan barang tertentu tanpa sepengetahuan user.
+Hal ini terjadi karena cookie dapat dikirimkan oleh browser untuk suatu domain tujuan, terlepas dari origin yang melakukan request.
+Dengan CSRF token (setiap form dan setiap user berbeda), malicious website ini tidak bisa menebak `csrf_token` yang benar.
+Dengan CORS yang benar (`Access-Control-Allow-Origin` bukan `*`, by default sudah benar), browser tidak memperbolehkan website malicious membaca response (termasuk `csrf_token`) dari website asli.
+Tanpa CSRF token yang benar, server akan menolak request dari malicious website tersebut.
+By default, jika tidak menerapkan `csrf_token` pada Django, form akan selalu ditolak oleh server.
+Selain `csrf_token`, Django juga menggunakan `CSRF_TRUSTED_ORIGINS` untuk memastikan request bukan CSRF.
+
+### Screenshot POSTMAN
+![XML Product List](https://i.imgur.com/LQXFteM.png)
+![JSON Product List](https://i.imgur.com/jJSrtWE.png)
+![XML Product by ID](https://i.imgur.com/8Lsjsty.png)
+![JSON Product by ID](https://i.imgur.com/L1UHiat.png)
 
 ## Tugas Individu 2
 ### Step by Step Implementation Checklist
