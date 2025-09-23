@@ -6,16 +6,25 @@
 </a>
 
 <h2>User Area</h2>
-{% if user %}
+{% if user.is_authenticated %}
 <p>Hello {{user.username}}!</p>
-{% endif %}
 <a href="{% url 'main:create_product' %}">
-  {% if not user %}
-  <button>+ Add product (needs log in)</button>
-  {% else %}
   <button>+ Add product</button>
-  {% endif %}
 </a>
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+{% else %}
+<a href="{% url 'main:create_product' %}">
+  <button>+ Add product (needs log in)</button>
+</a>
+<a href="{% url 'main:register' %}">
+  <button>Register</button>
+</a>
+<a href="{% url 'main:login' %}">
+  <button>Login</button>
+</a>
+{% endif %}
 
 <hr>
 <h2>Product List</h2>

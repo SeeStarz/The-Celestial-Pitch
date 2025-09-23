@@ -4,9 +4,12 @@
 
 <h1>{{ product.name }}</h1>
 <p><b>{{ product.get_category_display }}</b>
-  {% if product.is_featured %} 
-    | <b>Featured</b>
-  {% endif %}
+{% if product.is_featured %} 
+  | <b>Featured</b>
+{% endif %}
+{% if product.admin %}
+  | Added by <i>{{ product.admin.username }}</i>
+{% endif %}
   | <i>{{ product.created_at|date:"d M Y, H:i" }}</i> 
 </p>
 
@@ -17,4 +20,10 @@
 
 <p>Price: {{ product.base_price }}</p>
 <p>{{ product.description }}</p>
+
+<a href="{% url 'main:checkout' product.id %}">
+  <button>
+    Buy Now
+  </button>
+</a>
 {% endblock content %}

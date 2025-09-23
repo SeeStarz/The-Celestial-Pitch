@@ -13,6 +13,7 @@ urlpatterns = [
     path('xml/product/<uuid:id>/', views.xml_product_by_id, name='xml_product_by_id'),
     path('json/product/', views.json_product_list, name='json_product_list'),
     path('json/product/<uuid:id>/', views.json_product_by_id, name='json_product_by_id'),
+    path('checkout/<uuid:id>/', views.checkout, name='checkout'),
     path('register/', views.register_user, name='register'),
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),

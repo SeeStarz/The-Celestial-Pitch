@@ -20,7 +20,7 @@ class Product(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=31)
     created_at = models.DateTimeField(auto_now_add=True)
     is_featured = models.BooleanField(default=False)
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name

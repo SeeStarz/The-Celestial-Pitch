@@ -68,7 +68,9 @@ def create_product(request):
     form = ProductForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":
-        form.save()
+        product_entry = form.save(commit=False)
+        product_entry.admin = request.user
+        product_entry.save()
         return redirect('main:show_product_list')
 
     context = {'form': form}
@@ -94,6 +96,11 @@ def show_product_by_id(request, id: uuid.uuid4):
     }
 
     return render(request, 'product_detail.html', context)
+
+@login_required(login_url='/login')
+def checkout(request, id: uuid.uuid4):
+    context = {}
+    return render(request, 'checkout.html', context)
 
 def xml_product_list(request):
     product_list = Product.objects.all()
