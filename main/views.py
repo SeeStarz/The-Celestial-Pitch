@@ -24,6 +24,15 @@ def show_static(request, name: str):
     path = f'{settings.STATIC_ROOT}/{name}'
     return FileResponse(open(path, 'rb'))
 
+def register_user(request):
+    pass
+
+def login_user(request):
+    pass
+
+def logout_user(request):
+    pass
+
 def create_product(request):
     form = ProductForm(request.POST or None)
 
