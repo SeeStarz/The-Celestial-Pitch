@@ -1,8 +1,14 @@
 import re
 import uuid
+import datetime
 from django.shortcuts import render, redirect
 from django.core import serializers
-from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError, HttpResponse, Http404
+from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError, HttpResponse, Http404, HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.conf import settings
 from main.models import Product
 from main.forms import ProductForm
@@ -25,14 +31,39 @@ def show_static(request, name: str):
     return FileResponse(open(path, 'rb'))
 
 def register_user(request):
-    pass
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
 
 def login_user(request):
-    pass
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_product_list"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+
+    else:
+        form = AuthenticationForm(request)
+    context = {'form': form}
+    return render(request, 'login.html', context)
 
 def logout_user(request):
-    pass
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
 
+@login_required(login_url='/login')
 def create_product(request):
     form = ProductForm(request.POST or None)
 
