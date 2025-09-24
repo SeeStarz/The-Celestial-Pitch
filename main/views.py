@@ -1,6 +1,7 @@
 import re
 import uuid
-import datetime
+from datetime import datetime
+from datetime import UTC
 from django.shortcuts import render, redirect
 from django.core import serializers
 from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError, HttpResponse, Http404, HttpResponseRedirect
@@ -49,7 +50,7 @@ def login_user(request):
             user = form.get_user()
             login(request, user)
             response = HttpResponseRedirect(reverse("main:show_product_list"))
-            response.set_cookie('last_login', str(datetime.datetime.now()))
+            response.set_cookie('last_login', datetime.now(UTC).isoformat())
             return response
 
     else:
@@ -79,8 +80,20 @@ def create_product(request):
 def show_product_list(request):
     product_list = Product.objects.all()
 
+    last_login = request.COOKIES.get('last_login', None)
+    if last_login:
+        delta = datetime.now(UTC) - datetime.fromisoformat(last_login)
+        second = int(delta.total_seconds())
+        login_duration = second
+        minute, second = divmod(second, 60)
+        hour, minute = divmod(minute, 60)
+        login_duration = f'{hour:02}:{minute:02}:{second:02}'
+    else:
+        login_duration = None
+
     context = {
         'product_list': product_list,
+        'login_duration': login_duration
     }
 
     return render(request, 'product_list.html', context)
