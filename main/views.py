@@ -1,8 +1,15 @@
 import re
 import uuid
+from datetime import datetime
+from datetime import UTC
 from django.shortcuts import render, redirect
 from django.core import serializers
-from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError, HttpResponse, Http404
+from django.http import HttpResponseForbidden, FileResponse, HttpResponseServerError, HttpResponse, Http404, HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.conf import settings
 from main.models import Product
 from main.forms import ProductForm
@@ -24,11 +31,47 @@ def show_static(request, name: str):
     path = f'{settings.STATIC_ROOT}/{name}'
     return FileResponse(open(path, 'rb'))
 
+def register_user(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_product_list"))
+            response.set_cookie('last_login', datetime.now(UTC).isoformat())
+            return response
+
+    else:
+        form = AuthenticationForm(request)
+    context = {'form': form}
+    return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+
+@login_required(login_url='/login')
 def create_product(request):
     form = ProductForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":
-        form.save()
+        product_entry = form.save(commit=False)
+        product_entry.admin = request.user
+        product_entry.save()
         return redirect('main:show_product_list')
 
     context = {'form': form}
@@ -37,8 +80,20 @@ def create_product(request):
 def show_product_list(request):
     product_list = Product.objects.all()
 
+    last_login = request.COOKIES.get('last_login', None)
+    if last_login:
+        delta = datetime.now(UTC) - datetime.fromisoformat(last_login)
+        second = int(delta.total_seconds())
+        login_duration = second
+        minute, second = divmod(second, 60)
+        hour, minute = divmod(minute, 60)
+        login_duration = f'{hour:02}:{minute:02}:{second:02}'
+    else:
+        login_duration = None
+
     context = {
         'product_list': product_list,
+        'login_duration': login_duration
     }
 
     return render(request, 'product_list.html', context)
@@ -54,6 +109,11 @@ def show_product_by_id(request, id: uuid.uuid4):
     }
 
     return render(request, 'product_detail.html', context)
+
+@login_required(login_url='/login')
+def checkout(request, id: uuid.uuid4):
+    context = {}
+    return render(request, 'checkout.html', context)
 
 def xml_product_list(request):
     product_list = Product.objects.all()

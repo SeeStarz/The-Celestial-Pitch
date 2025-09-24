@@ -1,13 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>The Celestial Pitch</h1>
+<a href="{% url 'main:index' %}">
+  <p>About</p>
+</a>
+
+<h2>User Area</h2>
+{% if user.is_authenticated %}
+<p>Hello {{user.username}}!</p>
 <a href="{% url 'main:create_product' %}">
   <button>+ Add product</button>
 </a>
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+<br>
+<i>Logged for {{login_duration}}</i>
+{% else %}
+<a href="{% url 'main:create_product' %}">
+  <button>+ Add product (needs log in)</button>
+</a>
+<a href="{% url 'main:register' %}">
+  <button>Register</button>
+</a>
+<a href="{% url 'main:login' %}">
+  <button>Login</button>
+</a>
+{% endif %}
 
 <hr>
+<h2>Product List</h2>
 {% if not product_list %}
 <p>Sorry, our store haven't stocked products. We'll get to it :)</p>
 {% else %}
 
-{% for product in product_list %}
+  {% for product in product_list %}
 <div>
   <h2><a href="{% url 'main:show_product_by_id' product.id %}">{{ product.name }}</a></h2>
 
@@ -19,10 +46,10 @@
     | <i>{{ product.created_at|date:"d M Y H:i" }}</i> 
   </p>
 
-  {% if product.thumbnail %}
+    {% if product.thumbnail %}
   <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
   <br />
-  {% endif %}
+    {% endif %}
 
   <p>{{ product.description|truncatewords:25 }}...</p>
 
@@ -34,6 +61,7 @@
 </div>
 
 <hr>
-{% endfor %}
-
+  {% endfor %}
 {% endif %}
+
+{% endblock content %}
