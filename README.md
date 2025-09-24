@@ -7,9 +7,50 @@ I only realized I could do this after finishing the second assignment lol.
 - master: A dummy branch for merging whenever I want to deploy.
 
 ## Quick Links
+- [Tugas Individu 4](#tugas-individu-4)
 - [Tugas Individu 3](#tugas-individu-3)
 - [Tugas Individu 2](#tugas-individu-2)
 - [PWS Deployment](http://muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id)
+
+## Tugas Individu 4
+### Step by Step Implementation Checklist
+#### 1. Mengimplementasikan login, logout, dan register
+- Buat routing untuk masing-masing fungsionalitas
+- Gunakan `UserCreationForm` dari contrib django untuk membuat registrasi user sederhana, penggunaannya mirip dengan form lain
+- Gunakan `AuthenticatonForm` untuk data login, dan gunakan fungsi `login` untuk menginisialisasi session user
+- Fungsi login menggunakan django sessions untuk menyimpan data session user
+- Gunakan `logout` dari contrib django untuk logout
+- Tambahkan `@login_required(login_url='/login')` untuk rute yang memerlukan autentikasi
+
+### Membuat 2 Akun Pengguna dengan Masing-Masing 3 Dummy Data
+- Buat akun melalui laman registrasi
+- Login akun
+- Daftarkan produk
+
+### Menghubungkan Model Product dengan User
+- Tambahkan field `admin` (di sini hanya user biasa) untuk menandakan admin yang menambah katalog produk
+- Gunakan `User` dari contrib django dan `models.ForeignKey` untuk menambahkan sebuah relasi pada model lain.
+- Untuk `models.ForeignKey`, wajib menambahkan opsi `on_delete` dikarenakan Foreign Key tidak boleh dangling jika reference dihapus
+- Di sini saya gunakan `models.SET_NULL` agar jika akun admin dihapus, katalog tetap ada tetapiadmin pembuatnya tidak lagi direferensi (menjadi NULL)
+
+### Menampilkan Detail Informasi Pengguna Yang Sedang Logged In
+- Gunakan `request.get_user()` untuk mendapatkan `User` object
+- Akses atribut seperti `username` dengan `user.username`, lalu terapkan akses ini ke dalam template
+- Perhatikan bahwa atribut `password` tidaklah menyimpan password sebenarnya, melainkan password yang sudah di hash dengan salt, dan pada SQLite yang saya coba menggunakan pbkdf2.
+
+### Menggunakan dan Menampilkan Cookie
+- Gunakan `response.set_cookie` untuk men-set value-parameter pair pada cookie
+- Gunakan `request.COOKIES.get` untuk mengambil nilai dari cookie
+- Cookie pada dasarnya adalah dictionary biasa disimpan dalam plaintext
+
+## Django AuthenticationForm, Kelebihan, dan Kekurangannya
+Django `AuthenticationForm` adalah salah satu `Form` builtin django yang dapat digunakan untuk quick startup model autentikasi. Kelebihannya adalah sangat cepat dan mudah untuk di-setup, terintegrasi langsung dengan `authenticate` backend, dan cukup informatif. Kekurangannya adalah fleksibilitas yang kecil (hanya sebagai quick startup) dibanginkan form yang lebih kompleks misal penambahan captcha atau penggunaan login option lain (seperti SSO, mail, google, dll., tetapi harus didukung backend).
+
+## Apa Perbedaan Autentikasi dan Otorisasi serta Cara Django Mengimplementasikannya
+Autentikasi menjamin bahwa user adalah user yang valid (bukan orang lain) dengan standar yang wajar (user diwajibkan menjaga passwordnya sendiri). Otorisasi menjamin bahwa user yang melakukan suatu aksi memiliki izin untuk melakukan aksi tersebut. Pada django, otorisasi terikat dengan `User` class (atau dapat juga di extend), di mana pemberian otorisasi mirip ACL (Access control list). Setiap user diberi akses untuk aksi-aksi tertentu, termasuk akses untuk menggunakan akses yang disediakan suatu grup-grup tertentu. Dengan model ini, akses dapat ditentukan secara individual melalui user maupun secara massal melalui grup.
+
+## Apa Saja Kelebihan dan Kekurangan Session dan Cookies Dalam Menyimpan State Dalam Web
+Session artinya server melacak data-data yang berkaitan sebuah session identifier (umumnya disimpan pada cookie), sehingga server dapat mengingat detail user yang sedang log in tanpa memberi kewenangan bagi client untuk mendikte apa yang dapat ia lakukan. Cookie adalah storage yang disimpan oleh browser, berupa key-value pair, dikirimkan kembali ke server setiap request, dan isinya beragam tergantung keperluan dari server. Kelebihan session adalah server dapat menentukan data apa saja yang bersangkutan dengan session id tertentu, misalnya akses apa sajtetapi kekurangannya adalah server harus mengetahui data yang berkaitan dengan session id sehingga parallelisme dapat terbatas. Cookie lebih generik, kelebihannya dapat digunakan untuk apa saja dan diberikan oleh browser
 
 ## Tugas Individu 3
 ### Step by Step Implementation Checklist
