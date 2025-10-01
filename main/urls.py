@@ -17,6 +17,4 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
-    # We remove prefix because for some reason django prepends slash and it breaks this
-    path(settings.STATIC_URL.lstrip('/') + '<path:name>', views.show_static, name='static'),
 ]
