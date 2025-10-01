@@ -57,6 +57,14 @@
     <a href="{% url 'main:show_product_by_id' product.id %}">
       <button>Read More</button>
     </a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'main:edit_product' product.id %}">
+      <button>Edit</button>
+    </a>
+    <a href="{% url 'main:delete_product' product.id %}">
+      <button>Delete</button>
+    </a>
+    {% endif %}
   </p>
 </div>
 

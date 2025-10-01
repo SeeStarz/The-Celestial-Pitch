@@ -69,6 +69,30 @@ def create_product(request):
     context = {'form': form}
     return render(request, 'create_product.html', context)
 
+@login_required(login_url='/login')
+def delete_product(request, id):
+    try:
+        product = Product.objects.get(pk=id)
+        product.delete()
+    except Product.DoesNotExist:
+        return Http404()
+    return redirect('main:show_product_list')
+
+@login_required(login_url='/login')
+def edit_product(request, id):
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Http404()
+
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_product_list')
+
+    context = {'form': form}
+    return render(request, 'edit_product.html', context)
+
 def show_product_list(request):
     product_list = Product.objects.all()
 
