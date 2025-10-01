@@ -7,9 +7,85 @@ I only realized I could do this after finishing the second assignment lol.
 - master: A dummy branch for merging whenever I want to deploy.
 
 ## Quick Links
+- [Tugas Individu 5](#tugas-individu-5)
+- [Tugas Individu 4](#tugas-individu-4)
 - [Tugas Individu 3](#tugas-individu-3)
 - [Tugas Individu 2](#tugas-individu-2)
 - [PWS Deployment](http://muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id)
+
+## Tugas Individu 5
+### Step by Step Implementation Checklist
+#### Implementasi Fungsi untuk Menghapus dan Mengedit Product
+- Tambahkan url routing untuk kedua fungsi tersebut
+- Tambahkan fungsi menghapus dengan autorisasi yang benar (belom disetel, asumsi semua user admin di sini), menggunakan `model.delete()`
+- Tambahkan fungsi untuk mengupdate data product menggunakan `form.save()`, dan form tersebut diambil dari data product `instance=product`
+
+#### Kustomisasi Desain Template HTML
+- Kopas tutorial 4 :(
+- Ganti field yang tidak valid atau semantic berbeda
+
+### Urutan Prioritas CSS Selector
+- Css selector dengan `!important`
+- Inline html (menggunakan atribut `style=` pada html tag)
+- Selector yang lebih "spesifik" (id > class > tags) dibanding lebih umum
+- Selector yang ditulis lebih belakangan di kode
+
+### Mengapa Responsive Design Penting
+Selain cepatnya iterasi pengembangan website dibanding aplikasi _native_, website pada umumnya ditargetkan untuk banyak jenis perangkat. Jika website tidak mempertimbangkan pengguna pada mobile/desktop/tablet, maka pengalaman pengguna akan menjadi sangat kurang. HTML tanpa styling sudah menerapkan responsive design, tetapi styling yang tidak memerhatikan responsive design akan membuat page tidak/sulit dibaca untuk pengguna dengan perangkat yang tidak sesuai.
+
+### Contoh Website Dengan Atau Tanpa Responsive Design
+Responsive design: https://motherfuckingwebsite.com (hanya html tanpa styling), https://pbp-fasilkom-ui.github.io/ganjil-2026/assignments/individual/assignment-5 (dengan styling)
+Non-responsive design: https://pbp.cs.ui.ac.id/web/project/muhammad.fahri41/thecelestialpitch/
+
+### Perbedaan Margin, Border, dan Padding
+Margin adalah jarak antar elemen (termasuk border), jarak ini bukan bagian dari elemen (dan border) tersebut. Margin transparan, sehingga hanya digunakan untuk _spacing_. Padding adalah jarak antara isi elemen dan besarnya element box. Padding juga transparan. Karena keduanya transparan, tanpa border keduanya terlihat cukup sama. Perbedaannya adalah margin yang saling bertemu satu sama lain hanya akan menggunakan margin terbesar, dibandingkan padding yang akan dijumlahkan jaraknya. Border terletak di antara margin dan padding, dan umumnya nampak. Border berperan lebih berperan sebagai visual jika dibandingkan padding yang hanya _spacing_.
+
+### Perbedaan Flexbox dan Grid Layout
+Flexbox adalah container/element yang dapat membesar atau mengecil dua arah (vertikal atau horizontal). Elemen dalam flexbox dapat meminta untuk memperbesar sampai batasan flexbox, atau tetap pada ukuran yang sama, lalu flexbox akan mengurutkan dan menaruh elemen pada lokasi yang tepat. Oleh karena itu flexbox sangat bagus untuk digunakan pada layout dinamis yang bergantung pada dimensi data misal product description dan blog content.
+Grid layout artrinya semua elemen diletakkan pada sebuah grid. Elemen pada grid dapat menggunakan satu atau lebih grid sesuai kebutuhan. Karena grid sangat konsisten dalam bentuk ukuran elemen, grid sangat cocok untuk digunakan pada layout statis yang diketahui dimensinya misal dashboard ataupun login page.
+
+## Tugas Individu 4
+### Step by Step Implementation Checklist
+#### 1. Mengimplementasikan login, logout, dan register
+- Buat routing untuk masing-masing fungsionalitas
+- Gunakan `UserCreationForm` dari contrib django untuk membuat registrasi user sederhana, penggunaannya mirip dengan form lain
+- Gunakan `AuthenticatonForm` untuk data login, dan gunakan fungsi `login` untuk menginisialisasi session user
+- Fungsi login menggunakan django sessions untuk menyimpan data session user
+- Gunakan `logout` dari contrib django untuk logout
+- Tambahkan `@login_required(login_url='/login')` untuk rute yang memerlukan autentikasi
+
+### Membuat 2 Akun Pengguna dengan Masing-Masing 3 Dummy Data
+- Buat akun melalui laman registrasi
+- Login akun
+- Daftarkan produk
+
+### Menghubungkan Model Product dengan User
+- Tambahkan field `admin` (di sini hanya user biasa) untuk menandakan admin yang menambah katalog produk
+- Gunakan `User` dari contrib django dan `models.ForeignKey` untuk menambahkan sebuah relasi pada model lain.
+- Untuk `models.ForeignKey`, wajib menambahkan opsi `on_delete` dikarenakan Foreign Key tidak boleh dangling jika reference dihapus
+- Di sini saya gunakan `models.SET_NULL` agar jika akun admin dihapus, katalog tetap ada tetapiadmin pembuatnya tidak lagi direferensi (menjadi NULL)
+
+### Menampilkan Detail Informasi Pengguna Yang Sedang Logged In
+- Gunakan `request.get_user()` untuk mendapatkan `User` object
+- Akses atribut seperti `username` dengan `user.username`, lalu terapkan akses ini ke dalam template
+- Perhatikan bahwa atribut `password` tidaklah menyimpan password sebenarnya, melainkan password yang sudah di hash dengan salt, dan pada SQLite yang saya coba menggunakan pbkdf2.
+
+### Menggunakan dan Menampilkan Cookie
+- Gunakan `response.set_cookie` untuk men-set value-parameter pair pada cookie
+- Gunakan `request.COOKIES.get` untuk mengambil nilai dari cookie
+- Cookie pada dasarnya adalah dictionary biasa disimpan dalam plaintext
+
+## Django AuthenticationForm, Kelebihan, dan Kekurangannya
+Django `AuthenticationForm` adalah salah satu `Form` builtin django yang dapat digunakan untuk quick startup model autentikasi. Kelebihannya adalah sangat cepat dan mudah untuk di-setup, terintegrasi langsung dengan `authenticate` backend, dan cukup informatif. Kekurangannya adalah fleksibilitas yang kecil (hanya sebagai quick startup) dibanginkan form yang lebih kompleks misal penambahan captcha atau penggunaan login option lain (seperti SSO, mail, google, dll., tetapi harus didukung backend).
+
+## Apa Perbedaan Autentikasi dan Otorisasi serta Cara Django Mengimplementasikannya
+Autentikasi menjamin bahwa user adalah user yang valid (bukan orang lain) dengan standar yang wajar (user diwajibkan menjaga passwordnya sendiri). Otorisasi menjamin bahwa user yang melakukan suatu aksi memiliki izin untuk melakukan aksi tersebut. Pada django, otorisasi terikat dengan `User` class (atau dapat juga di extend), di mana pemberian otorisasi mirip ACL (Access control list). Setiap user diberi akses untuk aksi-aksi tertentu, termasuk akses untuk menggunakan akses yang disediakan suatu grup-grup tertentu. Dengan model ini, akses dapat ditentukan secara individual melalui user maupun secara massal melalui grup.
+
+## Apa Saja Kelebihan dan Kekurangan Session dan Cookies Dalam Menyimpan State Dalam Web
+Session artinya server melacak data-data yang berkaitan sebuah session identifier (umumnya disimpan pada cookie), sehingga server dapat mengingat detail user yang sedang log in tanpa memberi kewenangan bagi client untuk mendikte apa yang dapat ia lakukan. Cookie adalah storage yang disimpan oleh browser, berupa key-value pair, dikirimkan kembali ke server setiap request, dan isinya beragam tergantung keperluan dari server. Kelebihan session adalah server dapat menentukan data apa saja yang bersangkutan dengan session id tertentu, misalnya akses kontrol yang diperbolehkan untuk suatu user. Kekurangannya adalah server harus mengetahui data yang berkaitan dengan session id sehingga parallelisme dapat terbatas. Cookie lebih generik, kelebihannya dapat digunakan untuk apa saja dan selalu diberikan oleh browser sehingga dapat menyimpan data non-sensifit seperti opsi darkmode dan setting. Kekurangannya adalah cookie dapat dirubah oleh user sehingga tidak dapat diandalkan untuk hal-hal sensitif.
+
+## Apakah Penggunaan Cookies Aman Secara Default, Bagaimana Django Menanggapinya
+Cookies memiliki beberapa bahaya seperti penyimpanan plaintext yang dapat dimanipulasi oleh user. Selain itu karena cookie secara otomatis di-attach oleh browser untuk setiap request pada domain tertentu, maka website malicious dapat memanfaatkan cookie yang tersimpan untuk berpura-pura sebagai user yang log in. Django menangani ini dengan menggunakan session cookie yang hanya sebagai penanda session dan tidak bisa dibruteforce, serta penerapan csrf untuk menghindari cookie digunakan sebagai alat autentikasi tanpa consent pengguna.
 
 ## Tugas Individu 3
 ### Step by Step Implementation Checklist

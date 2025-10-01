@@ -23,14 +23,6 @@ def show_index(request):
 
     return render(request, 'index.html', context)
 
-def show_static(request, name: str):
-    # Matches /some-path/that-could/be-long/must-include/some-extension.txt-custom
-    whitelist = r'^(?:[\w\-]+/)*[\w\-]+\.[\w\-]+$'
-    if not re.match(whitelist, name):
-        return HttpResponseForbidden(f'Static file name must match {whitelist}')
-    path = f'{settings.STATIC_ROOT}/{name}'
-    return FileResponse(open(path, 'rb'))
-
 def register_user(request):
     form = UserCreationForm()
 
@@ -76,6 +68,30 @@ def create_product(request):
 
     context = {'form': form}
     return render(request, 'create_product.html', context)
+
+@login_required(login_url='/login')
+def delete_product(request, id):
+    try:
+        product = Product.objects.get(pk=id)
+        product.delete()
+    except Product.DoesNotExist:
+        return Http404()
+    return redirect('main:show_product_list')
+
+@login_required(login_url='/login')
+def edit_product(request, id):
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Http404()
+
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_product_list')
+
+    context = {'form': form}
+    return render(request, 'edit_product.html', context)
 
 def show_product_list(request):
     product_list = Product.objects.all()

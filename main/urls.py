@@ -9,14 +9,16 @@ urlpatterns = [
     path('product/form/', views.create_product, name='create_product'),
     path('product/', views.show_product_list, name='show_product_list'),
     path('product/<uuid:id>/', views.show_product_by_id, name='show_product_by_id'),
-    path('xml/product/', views.xml_product_list, name='xml_product_list'),
-    path('xml/product/<uuid:id>/', views.xml_product_by_id, name='xml_product_by_id'),
-    path('json/product/', views.json_product_list, name='json_product_list'),
-    path('json/product/<uuid:id>/', views.json_product_by_id, name='json_product_by_id'),
+    path('product/<uuid:id>/edit', views.edit_product, name='edit_product'),
+    path('product/<uuid:id>/delete', views.delete_product, name='delete_product'),
     path('checkout/<uuid:id>/', views.checkout, name='checkout'),
     path('register/', views.register_user, name='register'),
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
-    # We remove prefix because for some reason django prepends slash and it breaks this
-    path(settings.STATIC_URL.lstrip('/') + '<path:name>', views.show_static, name='static'),
+
+    # Data representation
+    path('xml/product/', views.xml_product_list, name='xml_product_list'),
+    path('xml/product/<uuid:id>/', views.xml_product_by_id, name='xml_product_by_id'),
+    path('json/product/', views.json_product_list, name='json_product_list'),
+    path('json/product/<uuid:id>/', views.json_product_by_id, name='json_product_by_id'),
 ]
