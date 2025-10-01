@@ -7,10 +7,42 @@ I only realized I could do this after finishing the second assignment lol.
 - master: A dummy branch for merging whenever I want to deploy.
 
 ## Quick Links
+- [Tugas Individu 5](#tugas-individu-5)
 - [Tugas Individu 4](#tugas-individu-4)
 - [Tugas Individu 3](#tugas-individu-3)
 - [Tugas Individu 2](#tugas-individu-2)
 - [PWS Deployment](http://muhammad-fahri41-thecelestialpitch.pbp.cs.ui.ac.id)
+
+## Tugas Individu 5
+### Step by Step Implementation Checklist
+#### Implementasi Fungsi untuk Menghapus dan Mengedit Product
+- Tambahkan url routing untuk kedua fungsi tersebut
+- Tambahkan fungsi menghapus dengan autorisasi yang benar (belom disetel, asumsi semua user admin di sini), menggunakan `model.delete()`
+- Tambahkan fungsi untuk mengupdate data product menggunakan `form.save()`, dan form tersebut diambil dari data product `instance=product`
+
+#### Kustomisasi Desain Template HTML
+- Kopas tutorial 4 :(
+- Ganti field yang tidak valid atau semantic berbeda
+
+### Urutan Prioritas CSS Selector
+- Css selector dengan `!important`
+- Inline html (menggunakan atribut `style=` pada html tag)
+- Selector yang lebih "spesifik" (id > class > tags) dibanding lebih umum
+- Selector yang ditulis lebih belakangan di kode
+
+### Mengapa Responsive Design Penting
+Selain cepatnya iterasi pengembangan website dibanding aplikasi _native_, website pada umumnya ditargetkan untuk banyak jenis perangkat. Jika website tidak mempertimbangkan pengguna pada mobile/desktop/tablet, maka pengalaman pengguna akan menjadi sangat kurang. HTML tanpa styling sudah menerapkan responsive design, tetapi styling yang tidak memerhatikan responsive design akan membuat page tidak/sulit dibaca untuk pengguna dengan perangkat yang tidak sesuai.
+
+### Contoh Website Dengan Atau Tanpa Responsive Design
+Responsive design: https://motherfuckingwebsite.com (hanya html tanpa styling), https://pbp-fasilkom-ui.github.io/ganjil-2026/assignments/individual/assignment-5 (dengan styling)
+Non-responsive design: https://pbp.cs.ui.ac.id/web/project/muhammad.fahri41/thecelestialpitch/
+
+### Perbedaan Margin, Border, dan Padding
+Margin adalah jarak antar elemen (termasuk border), jarak ini bukan bagian dari elemen (dan border) tersebut. Margin transparan, sehingga hanya digunakan untuk _spacing_. Padding adalah jarak antara isi elemen dan besarnya element box. Padding juga transparan. Karena keduanya transparan, tanpa border keduanya terlihat cukup sama. Perbedaannya adalah margin yang saling bertemu satu sama lain hanya akan menggunakan margin terbesar, dibandingkan padding yang akan dijumlahkan jaraknya. Border terletak di antara margin dan padding, dan umumnya nampak. Border berperan lebih berperan sebagai visual jika dibandingkan padding yang hanya _spacing_.
+
+### Perbedaan Flexbox dan Grid Layout
+Flexbox adalah container/element yang dapat membesar atau mengecil dua arah (vertikal atau horizontal). Elemen dalam flexbox dapat meminta untuk memperbesar sampai batasan flexbox, atau tetap pada ukuran yang sama, lalu flexbox akan mengurutkan dan menaruh elemen pada lokasi yang tepat. Oleh karena itu flexbox sangat bagus untuk digunakan pada layout dinamis yang bergantung pada dimensi data misal product description dan blog content.
+Grid layout artrinya semua elemen diletakkan pada sebuah grid. Elemen pada grid dapat menggunakan satu atau lebih grid sesuai kebutuhan. Karena grid sangat konsisten dalam bentuk ukuran elemen, grid sangat cocok untuk digunakan pada layout statis yang diketahui dimensinya misal dashboard ataupun login page.
 
 ## Tugas Individu 4
 ### Step by Step Implementation Checklist
