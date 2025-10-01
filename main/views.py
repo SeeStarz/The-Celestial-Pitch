@@ -23,14 +23,6 @@ def show_index(request):
 
     return render(request, 'index.html', context)
 
-def show_static(request, name: str):
-    # Matches /some-path/that-could/be-long/must-include/some-extension.txt-custom
-    whitelist = r'^(?:[\w\-]+/)*[\w\-]+\.[\w\-]+$'
-    if not re.match(whitelist, name):
-        return HttpResponseForbidden(f'Static file name must match {whitelist}')
-    path = f'{settings.STATIC_ROOT}/{name}'
-    return FileResponse(open(path, 'rb'))
-
 def register_user(request):
     form = UserCreationForm()
 
